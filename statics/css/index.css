@@ -1,0 +1,266 @@
+/* --------------------------INICIO DA PARTE DO BANNER CHARIZARD FLUTUANDO-------------------------- */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 50px 10%;
+  /* Cria um brilho circular vermelho suave atrás do Charizard */
+  background: radial-gradient(circle, rgba(198, 40, 40, 0.5) 0%, rgba(33, 33, 33, 0) 70%);
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.hero-texto {
+  max-width: 500px;
+}
+
+.botao-cta {
+  /* Formatação do botão (ver pokédex completa) */
+  background: #ffeb3b;
+  color: #212121;
+  padding: 15px 25px;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+  border-bottom: 4px solid #fbc02d;
+  display: inline-block;
+  transition: 0.2s;
+}
+
+.botao-cta:hover {
+  /* Formatação do combreado laranja*/
+  transform: translateY(2px);
+  border-bottom: 2px solid #fbc02d;
+}
+
+.pokemon-flutuante {
+  /* Serve para o pokémon ficar flutuando na página inicial */
+  width: 400px;
+  animation: flutuar 3s ease-in-out infinite;
+}
+
+@keyframes flutuar {
+  /* Animação que faz o Pokémon subir e descer suavemente */
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+/* --------------------------FIM DA PARTE DO BANNER CHARIZARD FLUTUANDO-------------------------- */
+
+/* -------------------------- INÍCIO NOVA SEÇÃO POKÉDEX ATUALMENTE -------------------------- */
+
+/* Esta seção mostra os dados globais da API em cards*/
+.estatisticas-mundo {
+  text-align: center;
+  padding: 50px 10%;
+  background: rgba(0, 0, 0, 0.4); /* Fundo escuro semitransparente para dar contraste */
+  color: white;
+}
+
+.stats-grid {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap; /* Faz os itens quebrarem de linha em telas de celular */
+}
+
+.stat-card {
+  /* Efeito de Vidro (Glassmorphism) nos cards de números */
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  border: 2px solid #ffeb3b;
+  padding: 20px;
+  border-radius: 15px;
+  width: 220px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-card:hover {
+  /* Levanta o card levemente quando passa o mouse */
+  transform: translateY(-5px);
+}
+
+.stat-card h3 {
+  font-size: 2rem;
+  color: #ffeb3b;
+  margin-bottom: 10px;
+  font-family: "Press Start 2P", cursive;
+  text-shadow: 2px 2px 0 #c62828;
+}
+/* -------------------------- FIM SEÇÃO POKÉDEX ATUALMENTE -------------------------- */
+
+/* --------------------------INICIO DA PARTE DO POKEMON DESTAQUE-------------------------- */
+.pokemon-destaque {
+  /* Seção principal do Pokémon do Dia. O background é alterado via JavaScript */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 10%;
+  transition: background 0.8s ease; /* Transição quando a cor do tipo muda */
+}
+
+.destaque-content {
+  /* Container interno que segura a foto e os textos */
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 50px;
+  flex-wrap: wrap;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(40, 40, 40, 0.8) 100%);
+  padding: 40px;
+  border-radius: 20px;
+  border: 4px solid #ffeb3b;
+  max-width: 900px;
+  width: 100%;
+  box-shadow: 0 0 30px rgba(255, 235, 59, 0.2);
+}
+
+#destaque-img {
+  /* Imagem oficial vinda da API */
+  width: 300px;
+  filter: drop-shadow(0 10px 10px rgba(0, 0, 0, 0.8));
+  transition: opacity 0.5s ease;
+  animation: flutuar 4s ease-in-out infinite; /* Reutiliza a animação de flutuar */
+}
+
+.info-destaque {
+  flex: 1;
+  min-width: 300px;
+}
+
+.info-destaque h3 {
+  color: #ffeb3b;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+#destaque-nome {
+  /* Nome do Pokémon sorteado */
+  font-family: "Press Start 2P", cursive;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  color: #fff;
+}
+
+#destaque-tipo {
+  font-family: "Press Start 2P", cursive;
+  font-size: 10px;
+  display: inline-block;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px black;
+}
+
+#destaque-desc {
+  /* Descrição biográfica do Pokémon */
+  line-height: 1.6;
+  margin-bottom: 25px;
+  color: #e0e0e0;
+  font-size: 0.95rem;
+}
+
+.stats {
+  width: 100%;
+}
+
+.stat-barra {
+  /* O fundo cinza da barra de progresso */
+  background: #444;
+  height: 15px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.stat-barra .fill {
+  /* A parte colorida da barra que o JS preenche */
+  background: linear-gradient(90deg, #ffeb3b, #fbc02d);
+  height: 100%;
+  font-size: 8px;
+  color: black;
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+  transition: width 1s ease-out; /* Faz a barra "encher" visualmente */
+}
+
+.tipo {
+  /* faz a com que o tipo do pokemon na index fique com a cor e formatação que esta la */
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+/* --------------------------FIM DA PARTE DO POKEMON DESTAQUE-------------------------- */
+
+/* --------------------------INICIO DA PARTE INFERIOR DA PAGINA INDEX-------------------------- */
+.recursos {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 50px 10%;
+  flex-wrap: wrap;
+}
+
+.recurso-item {
+  /* Aplicação de Glassmorphism (efeito de vidro) nos cards de navegação inferior */
+  background: rgba(255, 0, 0, 0.3); /* Vermelho translúcido */
+  backdrop-filter: blur(12px); /* Desfoca o que está atrás para parecer vidro fosco */
+  -webkit-backdrop-filter: blur(12px);
+  padding: 30px;
+  width: 280px;
+  text-align: center;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 235, 59, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transition:
+    transform 0.3s,
+    border-color 0.3s;
+}
+
+.recurso-item:hover {
+  /* Efeito de destaque ao passar o mouse */
+  transform: scale(1.05);
+  border-color: #ffeb3b;
+  background: #c62828;
+}
+
+.recurso-item h3 {
+  color: #ffeb3b;
+  margin-bottom: 15px;
+  text-shadow: 1px 1px #000;
+}
+
+.recurso-item p {
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.recurso-item a {
+  text-decoration: none;
+}
+
+.recurso-item a p {
+  color: white;
+  font-weight: bold;
+  margin-top: 15px;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.recurso-item a p:hover {
+  color: #ffeb3b;
+}
+/* --------------------------FIM DA PARTE INFERIOR DA PAGINA INDEX-------------------------- */

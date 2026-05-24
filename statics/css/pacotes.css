@@ -1,0 +1,218 @@
+/* --------------------------INICIO DA PARTE DOS BOOSTERS DE POKEMON-------------------------- */
+.pacotes-container {
+  /* formata a main dos pacotes */
+  padding-top: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  min-height: 100vh;
+}
+
+.escolha-pacotes {
+  /* formata o selection da parte de pacotes */
+  display: flex;
+  gap: 40px;
+  margin-top: 50px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.booster-option {
+  /* formata a parte cinza dos boosters */
+  background: #333;
+  border: 4px solid #555;
+  border-radius: 20px;
+  width: 300px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.booster-option:hover {
+  /* formata a parte cinza quando passa o mouse por cima dela */
+  border-color: #ffeb3b;
+  transform: scale(1.05);
+  background: #444;
+}
+
+.booster-img {
+  /* formata a imagem das pokebolas dos boosters*/
+  width: 100px;
+  margin-bottom: 20px;
+}
+
+.booster-info h3 {
+  /* Formata o texto do h3 pra essa pagina */
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.booster-info p {
+  /* Formata o p pra essa pagina */
+  font-size: 11px;
+  color: #ccc;
+  margin-bottom: 25px;
+}
+
+/* --------------------------FIM DA PARTE DOS BOOSTERS DE POKEMON-------------------------- */
+
+.hidden {
+  display: none !important;
+}
+
+.area-revelacao {
+  text-align: center;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.grid-revelacao {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  width: 95%;
+  max-width: 1100px;
+  margin-bottom: 30px;
+  perspective: 1000px; /* Necessário para o efeito 3D */
+}
+
+.card-reveal-wrapper {
+  width: 180px;
+  height: 280px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.card-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.card-back {
+  background: linear-gradient(135deg, #c62828 0%, #8e1a1a 100%);
+  border: 5px solid #ffeb3b;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  padding: 0;
+}
+
+.card-front {
+  transform: rotateY(180deg);
+  z-index: 1;
+}
+
+.card-revelado {
+  border: 5px solid #ffeb3b;
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 15px;
+  padding: 15px;
+  width: 100%;
+  height: 100%;
+}
+
+.card-revelado img {
+  width: 130px;
+}
+
+/* Raridades */
+.raridade-comum {
+  border-color: #777 !important;
+}
+.raridade-raro {
+  border-color: #ffeb3b !important;
+  box-shadow: 0 0 15px rgba(255, 235, 59, 0.4);
+}
+
+.btn-voltar {
+  /* formata o botão de voltar para ver os outros pacotes */
+  background: #c62828;
+  color: white;
+  border: 4px solid #8e1a1a;
+  padding: 15px 30px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 13px;
+  transition: 0.3s;
+  display: block;
+}
+
+.btn-voltar:hover {
+  /* formata para quando passam o mouse por cima do botão voltar */
+  background: #ff1744;
+  transform: scale(1.05);
+}
+
+.efeito-lendario {
+  /* formata o efeito especial para o card Lendário */
+  border-color: #9c27b0 !important;
+  /* (!important) é uma tag que faz com que ela seja priorizada ao invez de outras tags, entçaoela faz o amarelo sair e ficar o roxo */
+  box-shadow:
+    0 0 30px #9c27b0,
+    inset 0 0 15px #9c27b0;
+  background: rgba(156, 39, 176, 0.2) !important;
+  animation: brilhoLendario 2s infinite alternate !important;
+}
+
+@keyframes brilhoLendario {
+  from {
+    box-shadow: 0 0 20px #9c27b0;
+  }
+  to {
+    box-shadow:
+      0 0 40px #9c27b0,
+      0 0 60px #e040fb;
+  }
+}
+
+/* ANIMAÇÃO DE REVELAÇÃO */
+@keyframes revelar {
+  /* Animação de revelar o card do pokemon */
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  80% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* --------------------------FIM DA ÁREA DE REVELAÇÃO DO POKEMON-------------------------- */

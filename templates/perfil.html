@@ -1,0 +1,41 @@
+{% extends "base.html" %} {% block title %}Meu Perfil - Pokémon{% endblock %} {% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}" />
+{% endblock %} {% block content %}
+<div class="pokedex-container">
+  <h1>MEU PERFIL</h1>
+  <div class="destaque-content perfil-destaque">
+    <img src="{{ url_for('static', filename='uploads/' + user.foto) }}" alt="Foto de Perfil" class="pokemon-flutuante perfil-foto" />
+
+    <form action="{{ url_for('user.perfil') }}" method="POST" enctype="multipart/form-data" class="info-destaque perfil-form-container">
+      <div class="perfil-field-group">
+        <label>NOME</label>
+        <input type="text" name="nome" value="{{ user.nome }}" required class="form-control" />
+
+        <label>E-MAIL</label>
+        <input type="email" name="email" value="{{ user.email }}" required class="form-control" />
+
+        {% if user.precisa_resetar %}
+        <label>NOVA SENHA</label>
+        <input type="password" name="senha" class="form-control" placeholder="Digite a nova senha" required />
+
+        <label>CONFIRMAR NOVA SENHA</label>
+        <input type="password" name="confirma_senha" class="form-control" placeholder="Confirme a nova senha" required />
+        {% endif %}
+
+        <label for="foto">ALTERAR FOTO DE PERFIL</label>
+        <div class="file-upload-wrapper" style="margin-top: 5px">
+          <input
+            type="file"
+            name="foto"
+            id="foto"
+            class="file-input-hidden"
+            onchange="this.nextElementSibling.innerText = this.files[0] ? this.files[0].name : '📷 Escolher Nova Foto...'"
+          />
+          <label for="foto" class="file-input-label">Escolher Nova Foto...</label>
+        </div>
+      </div>
+      <button type="submit" class="btn-abrir" style="margin-top: 20px">ATUALIZAR DADOS</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

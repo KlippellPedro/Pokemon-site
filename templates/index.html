@@ -1,0 +1,85 @@
+{% extends "base.html" %} {% block title %}Pokémon - Início{% endblock %} {% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}" />
+{% endblock %} {% block content %}
+<section class="hero">
+  <div class="hero-texto">
+    <h1>MUNDO POKÉMON</h1>
+    <a href="{{ url_for('user.pokedex') }}" class="botao-cta">VER POKÉDEX COMPLETA</a>
+  </div>
+  <img src="{{ url_for('static', filename='uploads/pokemon/Rayquaza-mega.webp') }}" alt="Rayquaza" class="pokemon-flutuante" />
+</section>
+
+<section class="estatisticas-mundo">
+  <h2>A POKÉDEX ATUALMENTE</h2>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <h3 id="total-pokemon">...</h3>
+      <p>Espécies Descobertas</p>
+    </div>
+    <div class="stat-card">
+      <h3>18</h3>
+      <p>Tipos Existentes</p>
+    </div>
+    <div class="stat-card">
+      <h3>9</h3>
+      <p>Gerações Exploradas</p>
+    </div>
+  </div>
+</section>
+
+<section class="pokemon-destaque" id="destaque-bg">
+  <div class="destaque-content">
+    <img id="destaque-img" src="{{ url_for('static', filename='uploads/utilidade/icon.png') }}" alt="Carregando..." class="pokemon-flutuante" />
+
+    <div class="info-destaque">
+      <h3>POKÉMON DO DIA</h3>
+      <h3 id="destaque-nome">Carregando...</h3>
+      <span class="tipo" id="destaque-tipo">???</span>
+      <p id="destaque-desc" class="negrito">Buscando informações na PokéDex...</p>
+
+      <div class="stats">
+        <div class="stat-barra">
+          <div class="fill" id="stat-hp" style="width: 0%">
+            <h4 class="negrito">HP</h4>
+          </div>
+        </div>
+        <div class="stat-barra">
+          <div class="fill" id="stat-atk" style="width: 0%">
+            <h4 class="negrito">ATK</h4>
+          </div>
+        </div>
+        <div class="stat-barra">
+          <div class="fill" id="stat-def" style="width: 0%">
+            <h4 class="negrito">DEF</h4>
+          </div>
+        </div>
+        <div class="stat-barra">
+          <div class="fill" id="stat-spd" style="width: 0%">
+            <h4 class="negrito">SPD</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="recursos">
+  <div class="recurso-item">
+    <h3>Montar Equipe</h3>
+    <p>Crie o time perfeito para vencer a liga.</p>
+    <a href="{{ url_for('user.equipe') }}"><p>Ir para Equipe ></p></a>
+  </div>
+  <div class="recurso-item">
+    <h3>Pacotes</h3>
+    <p>Abra pacotes e veja qual pokémon vem.</p>
+    <a href="{{ url_for('user.pacotes') }}"><p>Ver Pacotes ></p></a>
+  </div>
+  <div class="recurso-item">
+    <h3>Social</h3>
+    <p>Tente adivinhar qual é o Pokémon do dia.</p>
+    <a href="{{ url_for('user.social') }}"><p>Ver Social ></p></a>
+  </div>
+</section>
+{% endblock %} {% block extra_js %}
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}

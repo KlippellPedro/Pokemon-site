@@ -1,0 +1,257 @@
+{% extends "base.html" %} {% block title %}Painel Administrativo - Pokémon{% endblock %} {% block content %}
+<div class="pokedex-container">
+  <h1>CENTRAL DE COMANDO</h1>
+  <p style="text-align: center; color: var(--neon-blue)">Controle total sobre o ecossistema Pokémon</p>
+
+  <!-- Seção de Métricas (Requisito do Professor) -->
+  <div class="admin-grid" style="margin-bottom: 0">
+    <div class="admin-card-control" style="text-align: center; border-color: var(--neon-blue)">
+      <h2 style="margin: 0; color: #fff; text-shadow: none">{{ stats.total_usuarios }}</h2>
+      <p style="color: var(--neon-blue); margin: 0; font-weight: bold">TOTAL DE USUÁRIOS</p>
+    </div>
+    <div class="admin-card-control" style="text-align: center; border-color: var(--type-grass)">
+      <h2 style="margin: 0; color: #fff; text-shadow: none">{{ stats.novos_cadastros }}</h2>
+      <p style="color: var(--type-grass); margin: 0; font-weight: bold">USUÁRIOS COMUNS</p>
+    </div>
+    <div class="admin-card-control" style="text-align: center; border-color: var(--pokemon-yellow)">
+      <h2 style="margin: 0; color: #fff; text-shadow: none">{{ stats.total_capturas }}</h2>
+      <p style="color: var(--pokemon-yellow); margin: 0; font-weight: bold">POKÉMONS CAPTURADOS</p>
+    </div>
+  </div>
+
+  <div class="admin-grid">
+    <!-- Criar Novo Usuário (Novo Requisito) -->
+    <div class="admin-card-control" style="border-color: #4caf50">
+      <h3 style="color: #4caf50"><i class="fas fa-user-plus"></i> NOVO TREINADOR</h3>
+      <p style="font-size: 11px; margin-bottom: 15px">Cadastre um novo usuário manualmente.</p>
+      <form action="{{ url_for('admin.user_create') }}" method="POST" class="auth-form">
+        <input type="text" name="nome" class="form-control" placeholder="Nome do Treinador" required style="margin-bottom: 10px" />
+        <input type="email" name="email" class="form-control" placeholder="E-mail" required style="margin-bottom: 10px" />
+        <div style="display: flex; gap: 10px; margin-bottom: 10px">
+          <input type="password" name="senha" class="form-control" placeholder="Senha" required />
+          <select name="tipo" class="form-control">
+            <option value="user">USER</option>
+            <option value="admin">ADMIN</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-abrir" style="background: #4caf50; box-shadow: 0 4px 0 #2e7d32">CRIAR CONTA</button>
+      </form>
+    </div>
+
+    <!-- Controle do Pokémon do Dia -->
+    <div class="admin-card-control">
+      <h3><i class="fas fa-star"></i> DESTAQUE DO DIA</h3>
+      <p style="font-size: 11px; margin-bottom: 15px">Escolha qual Pokémon aparecerá na Home para todos.</p>
+
+      <form action="{{ url_for('admin.set_destaque') }}" method="POST" class="auth-form" id="form-set-destaque">
+        <div class="form-group" style="position: relative; margin-bottom: 5px">
+          <input type="text" class="form-control" name="pokemon_nome" id="pokemon-input" placeholder="Nome ou ID..." autocomplete="off" />
+          <div id="pokedex-autocomplete-list" class="autocomplete-items"></div>
+        </div>
+        <button type="submit" class="btn-abrir">ATUALIZAR HOME</button>
+        <a href="{{ url_for('admin.reset_destaque') }}" class="btn-limpar" style="width: 100%; margin-top: 10px; text-align: center">
+          RESETAR PARA ALEATÓRIO
+        </a>
+      </form>
+    </div>
+
+    <!-- Controle dos Minigames -->
+    <div class="admin-card-control" style="border-color: var(--type-psychic)">
+      <h3 style="color: var(--type-psychic)"><i class="fas fa-gamepad"></i> MINE GAMES</h3>
+      <p style="font-size: 11px; margin-bottom: 15px">Force um Pokémon específico no Wordle ou Silhueta.</p>
+
+      <form action="{{ url_for('admin.set_game') }}" method="POST" class="auth-form" id="form-set-game">
+        <select name="game_mode" class="form-control" style="margin-bottom: 10px">
+          <option value="classic">Modo Clássico (Diário)</option>
+          <option value="silhouette">Modo Silhueta</option>
+        </select>
+        <div class="form-group" style="position: relative; margin-top: 10px">
+          <input type="text" class="form-control" name="pokemon_nome" placeholder="Nome do Alvo..." required autocomplete="off" />
+          <div class="autocomplete-items"></div>
+        </div>
+        <button type="submit" class="btn-abrir" style="background: var(--type-psychic)">DEFINIR ALVO</button>
+      </form>
+    </div>
+
+    <!-- Gerenciamento de Usuários -->
+    <div class="admin-card-control" style="grid-column: 1 / -1; border-color: var(--pokemon-yellow)">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px">
+        <h3 style="color: var(--pokemon-yellow); margin: 0"><i class="fas fa-users"></i> TREINADORES</h3>
+
+        <!-- Filtros de Busca AJAX -->
+        <div class="admin-filters" style="margin: 0; padding: 5px">
+          <input type="text" id="admin-search-user" placeholder="Buscar por Nome, E-mail ou ID..." style="width: 250px" />
+          <input type="date" id="admin-filter-date" title="Filtrar por data de cadastro" />
+          <select id="admin-filter-type">
+            <option value="">Todos</option>
+            <option value="user">Treinadores</option>
+            <option value="admin">Admins</option>
+          </select>
+        </div>
+      </div>
+
+      <table class="admin-table" id="users-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>NOME</th>
+            <th>E-MAIL</th>
+            <th>STATUS</th>
+            <th>AÇÕES</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for u in users %}
+          <tr>
+            <td>#{{ u.id }}</td>
+            <td>{{ u.nome }}</td>
+            <td>{{ u.email }}</td>
+            <td>
+              {% if u.is_admin %}
+              <span class="badge-admin">ADMIN</span>
+              {% else %}
+              <span style="color: #4caf50">TREINADOR</span>
+              {% endif %}
+            </td>
+            <td>
+              <button
+                class="btn-limpar"
+                style="padding: 5px 10px; font-size: 10px"
+                onclick="abrirModalEdicao('{{ u.id }}', '{{ u.nome }}', '{{ u.email }}', '{{ u.is_admin }}')"
+              >
+                EDITAR
+              </button>
+
+              <button
+                class="btn-limpar"
+                style="padding: 5px 10px; font-size: 10px; background: #7b1fa2"
+                onclick="confirmarReset('{{ u.id }}', '{{ u.nome }}')"
+              >
+                RESET SENHA
+              </button>
+
+              {% if u.id != session['user_id'] %}
+              <button
+                class="btn-delete"
+                style="background: none; border: none; color: #ff5252; cursor: pointer; text-decoration: underline; font-size: 11px"
+                onclick="abrirModalExclusao('{{ u.id }}', '{{ u.nome }}')"
+              >
+                Excluir
+              </button>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Edição -->
+<div id="modal-edit" class="modal-overlay hidden">
+  <div class="modal-confirm" style="border-color: var(--neon-blue); max-width: 400px">
+    <h2 style="color: var(--neon-blue)">EDITAR TREINADOR</h2>
+    <form id="form-editar-usuario" method="POST" class="auth-form">
+      <div class="form-group">
+        <label>NOME</label>
+        <input type="text" name="nome" id="edit-nome" class="form-control" required />
+      </div>
+      <div class="form-group">
+        <label>E-MAIL</label>
+        <input type="email" name="email" id="edit-email" class="form-control" required />
+      </div>
+      <div class="form-group">
+        <label>TIPO DE CONTA</label>
+        <select name="tipo" id="edit-tipo" class="form-control">
+          <option value="user">USER</option>
+          <option value="admin">ADMIN</option>
+        </select>
+      </div>
+      <div class="btn-group-modal" style="margin-top: 20px">
+        <button type="button" class="btn-limpar" onclick="fecharModalEdicao()">CANCELAR</button>
+        <button type="submit" class="btn-abrir" style="margin-top: 0">SALVAR ALTERAÇÕES</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal de Reset de Senha (Novo) -->
+<div id="modal-reset" class="modal-overlay hidden">
+  <div class="modal-confirm" style="border-color: #7b1fa2">
+    <h2 style="color: #7b1fa2">RESETAR SENHA?</h2>
+    <p id="texto-reset">Deseja realmente resetar a senha deste treinador?</p>
+    <div class="btn-group-modal">
+      <button class="btn-limpar" onclick="fecharModalReset()">CANCELAR</button>
+      <form id="form-confirmar-reset" method="POST" style="display: inline">
+        <button type="submit" class="btn-abrir" style="background: #7b1fa2; margin-top: 0; box-shadow: 0 4px 0 #4a148c">CONFIRMAR</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Confirmação -->
+<div id="modal-delete" class="modal-overlay hidden">
+  <div class="modal-confirm">
+    <h2>EXPULSAR TREINADOR?</h2>
+    <p id="texto-confirmacao">Tem certeza que deseja remover o treinador?</p>
+    <div class="btn-group-modal">
+      <button class="btn-limpar btn-cancelar" onclick="fecharModalExclusao()">CANCELAR</button>
+      <form id="form-confirmar-exclusao" method="POST" style="display: inline">
+        <input type="hidden" name="user_id" id="user-id-to-delete" />
+        <button type="submit" class="btn-abrir" style="background: var(--primary-red); margin-top: 0; box-shadow: 0 4px 0 #8e1a1a">CONFIRMAR</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  const currentUserId = '{{ session.get("user_id", "") }}';
+
+  function abrirModalExclusao(id, nome) {
+    document.getElementById("texto-confirmacao").innerHTML = `Tem certeza que deseja expulsar <strong>${nome}</strong> da liga?`;
+    document.getElementById("form-confirmar-exclusao").action = "{{ url_for('admin.user_delete', user_id=0) }}".replace("/0", "/" + id);
+    document.getElementById("modal-delete").classList.remove("hidden");
+  }
+
+  function fecharModalExclusao() {
+    document.getElementById("modal-delete").classList.add("hidden");
+  }
+
+  function abrirModalEdicao(id, nome, email, isAdmin) {
+    document.getElementById("edit-nome").value = nome;
+    document.getElementById("edit-email").value = email;
+    document.getElementById("edit-tipo").value = isAdmin === "1" || isAdmin === "True" ? "admin" : "user";
+    document.getElementById("form-editar-usuario").action = "{{ url_for('admin.user_edit', user_id=0) }}".replace("/0", "/" + id);
+    document.getElementById("modal-edit").classList.remove("hidden");
+  }
+
+  function fecharModalEdicao() {
+    document.getElementById("modal-edit").classList.add("hidden");
+  }
+
+  function confirmarReset(id, nome) {
+    document.getElementById("texto-reset").innerHTML =
+      `Deseja resetar a senha de <strong>${nome}</strong>? Ele precisará criar uma nova no próximo login.`;
+    document.getElementById("form-confirmar-reset").action = "{{ url_for('admin.user_reset_password', user_id=0) }}".replace("/0", "/" + id);
+    document.getElementById("modal-reset").classList.remove("hidden");
+  }
+
+  function fecharModalReset() {
+    document.getElementById("modal-reset").classList.add("hidden");
+  }
+
+  // Fecha modais ao clicar fora
+  window.onclick = function (event) {
+    if (event.target.classList.contains("modal-overlay")) {
+      fecharModalExclusao();
+      fecharModalEdicao();
+      fecharModalReset();
+    }
+  };
+</script>
+
+<!-- Importamos o JS de busca e do Admin -->
+<script src="{{ url_for('static', filename='js/pokedex.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

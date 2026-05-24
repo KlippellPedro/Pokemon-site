@@ -1,0 +1,299 @@
+/* --- CONFIGURAÇÃO GERAL --- */
+html,
+body {
+  overflow-x: hidden; /* Remove a barra de rolagem horizontal */
+  width: 100%;
+}
+
+.social-container {
+  padding-top: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* --- TABS --- */
+.social-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab-btn {
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: 2px solid #555;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.tab-btn.active {
+  border-color: #ffeb3b;
+  color: #ffeb3b;
+  background: rgba(198, 40, 40, 0.4);
+}
+
+/* --- SILHUETA --- */
+.silhouette-box {
+  background: radial-gradient(circle, #4caf50 0%, #1b5e20 100%);
+  border-radius: 50%;
+  padding: 30px;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  box-shadow:
+    inset 0 0 20px rgba(0, 0, 0, 0.5),
+    0 5px 15px rgba(0, 0, 0, 0.3);
+  border: 4px solid #2e7d32;
+}
+
+#silhouette-img {
+  width: 180px;
+  filter: brightness(0); /* Fica todo preto */
+  transition: filter 0.5s ease;
+}
+
+#silhouette-img.revealed {
+  filter: brightness(1); /* Revela as cores */
+}
+
+/* --- CONTAINER DO JOGO --- */
+.game-container {
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 700px;
+  width: 90%;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 3px solid var(--pokemon-yellow);
+  box-shadow: 0 0 20px rgba(255, 235, 59, 0.2);
+}
+
+/* --- ESTILOS QUE ERAM INLINE --- */
+.busca-wrapper {
+  background: none;
+  padding: 0;
+  width: 100%;
+}
+
+.input-relative {
+  position: relative;
+  width: 100%;
+}
+
+.tentativas-texto {
+  margin-top: 20px;
+  color: var(--pokemon-yellow);
+  font-weight: bold;
+  font-size: 13px;
+  text-shadow: 1px 1px 0 #000;
+}
+
+/* --- INPUT E AUTOCOMPLETE --- */
+#game-input {
+  width: 100%;
+  padding: 15px;
+  border-radius: 10px;
+  border: 2px solid var(--pokemon-yellow);
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  outline: none;
+  box-sizing: border-box; /* Garante que o padding não aumente a largura */
+}
+
+/* --- CARDS DE RESULTADOS --- */
+.guess-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #adacac;
+  padding: 10px 20px;
+  border-radius: 15px;
+  margin-top: 15px;
+  color: #333;
+  animation: aparecerCard 0.5s ease-out;
+}
+
+.pokemon-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.pokemon-info img {
+  width: 70px;
+}
+
+.attributes {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  background-color: #ff1f51;
+  position: relative;
+  font-size: 11px;
+  text-align: center;
+}
+
+.circle.correct {
+  background-color: #4caf50;
+}
+
+.arrow-icon {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 18px;
+  height: 18px;
+  background-color: white;
+  border-radius: 50%;
+  padding: 2px;
+}
+
+/* --- RESPONSIVIDADE (MOBILE) --- */
+@media (max-width: 650px) {
+  .game-container {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .guess-row {
+    flex-direction: column; /* Empilha o Pokémon e os Atributos */
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .attributes {
+    flex-wrap: wrap; /* Permite que as bolinhas quebrem linha */
+    justify-content: center;
+  }
+
+  .circle {
+    width: 55px;
+    height: 55px;
+    font-size: 10px;
+  }
+
+  .pokemon-info {
+    font-size: 1rem;
+  }
+}
+
+/* --- ANIMAÇÕES --- */
+@keyframes aparecerCard {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.erro-shake {
+  animation: shake 0.5s;
+  border: 2px solid #ff5252 !important;
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+/* --- MODAL DE VITÓRIA --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10005;
+  backdrop-filter: blur(8px);
+  animation: aparecerCard 0.3s ease-out;
+}
+
+.modal-vitoria {
+  background: var(--glass-bg);
+  border: 4px solid var(--pokemon-yellow);
+  padding: 40px;
+  border-radius: 30px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 0 30px var(--pokemon-yellow);
+  position: relative;
+}
+
+.modal-vitoria h2 {
+  margin: 0 0 15px 0;
+  font-size: 28px;
+}
+
+.modal-vitoria img {
+  width: 200px;
+  filter: drop-shadow(0 0 10px rgba(255, 235, 59, 0.5));
+  margin-bottom: 20px;
+}
+
+.modal-vitoria p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.btn-modal {
+  margin-top: 20px;
+  width: 100%;
+  padding: 15px;
+  border-radius: 15px;
+  background: var(--pokemon-yellow);
+  color: #000;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}

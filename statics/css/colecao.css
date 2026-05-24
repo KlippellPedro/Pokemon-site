@@ -1,0 +1,115 @@
+/* Estilos específicos da página de Coleção */
+.colecao-subtitulo {
+  color: white;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.colecao-vazia {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 50px;
+}
+
+.colecao-vazia p {
+  color: white;
+  font-size: 1.2rem;
+}
+
+.colecao-vazia .btn-abrir {
+  display: inline-block;
+  margin-top: 20px;
+  text-decoration: none;
+}
+
+/* Estilização da Barra de Filtros */
+.colecao-filtros {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(10px);
+  border: 3px solid var(--pokemon-yellow) !important;
+  border-radius: 20px;
+  padding: 25px;
+  margin: 0 auto 30px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.filtro-nome {
+  width: 100%;
+  max-width: 500px;
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+.filtro-grupo {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filtro-tipo {
+  background: #333;
+  color: white;
+  padding: 12px;
+  border-radius: 10px;
+  border: 2px solid var(--pokemon-yellow);
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+  flex: 1;
+  max-width: 200px;
+  outline: none;
+}
+
+.btn-limpar {
+  background: #555 !important;
+  color: white !important;
+  padding: 18px 28px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-family: "Press Start 2P", cursive;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-limpar:hover {
+  background: #777 !important;
+  transform: scale(1.05);
+  color: var(--pokemon-yellow) !important;
+}
+
+.btn-remover-colecao {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: rgba(198, 40, 40, 0.8);
+  color: white;
+  border: 1px solid white;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-weight: bold;
+  z-index: 10;
+  transition: 0.2s;
+  font-family: sans-serif;
+}
+
+.btn-remover-colecao:hover {
+  background: #ff1744;
+  transform: scale(1.2);
+}

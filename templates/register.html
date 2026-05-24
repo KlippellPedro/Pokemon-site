@@ -1,0 +1,41 @@
+{% extends "base.html" %} {% block title %}Cadastro - Pokémon{% endblock %} {% block content %}
+<main class="auth-container">
+  <div class="auth-card">
+    <img src="{{ url_for('static', filename='uploads/utilidade/poke-ball.png') }}" alt="Pokébola" class="auth-icon" />
+    <h1>CADASTRO</h1>
+    <p style="margin-bottom: 20px; color: #ccc; font-size: 14px">Comece sua jornada Pokémon!</p>
+
+    <form action="{{ url_for('auth.register') }}" method="POST" enctype="multipart/form-data" class="auth-form">
+      <div class="form-group">
+        <label for="nome">NOME COMPLETO</label>
+        <input type="text" name="nome" id="nome" class="form-control" placeholder="Ash Ketchum" required />
+      </div>
+      <div class="form-group">
+        <label for="email">E-MAIL</label>
+        <input type="email" name="email" id="email" class="form-control" placeholder="treinador@poke.com" required />
+      </div>
+      <div class="form-group">
+        <label for="senha">SENHA</label>
+        <input type="password" name="senha" id="senha" class="form-control" placeholder="********" required />
+      </div>
+      <div class="form-group">
+        <label for="foto">FOTO DE PERFIL</label>
+        <div class="file-upload-wrapper">
+          <input
+            type="file"
+            name="foto"
+            id="foto"
+            class="file-input-hidden"
+            onchange="this.nextElementSibling.innerText = this.files[0] ? this.files[0].name : '📷 Escolher Foto de Perfil...'"
+          />
+          <label for="foto" class="file-input-label">Escolher Foto de Perfil... </label>
+        </div>
+      </div>
+      <button type="submit" class="btn-abrir">CADASTRAR</button>
+    </form>
+    <div class="auth-footer">
+      <p>Já tem uma conta? <a href="{{ url_for('auth.login') }}" style="color: var(--pokemon-yellow)">Faça Login</a></p>
+    </div>
+  </div>
+</main>
+{% endblock %}

@@ -1,0 +1,260 @@
+/* --------------------------INICIO DA CENTRALIZAÇÃO DO CONTEUDO DA PAGINA-------------------------- */
+.pokedex-container {
+  padding-top: 100px;
+  /* Espaço para o menu fixo não cobrir o título */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  color: white;
+  width: 100%;
+}
+
+.titulo-secao {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #ffeb3b;
+  text-shadow: 2px 2px #c62828;
+  text-align: center;
+}
+
+/* --------------------------FINAL DA CENTRALIZAÇÃO DO CONTEUDO DA PAGINA-------------------------- */
+/* --------------------------INICIO DA BARRA DE BUSCA-------------------------- */
+.busca-container {
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 700px;
+  width: 95%;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 3px solid var(--pokemon-yellow);
+  box-shadow: 0 0 20px rgba(255, 235, 59, 0.2);
+  margin: 0 auto 40px auto;
+}
+
+#pokemon-input {
+  width: 100%;
+  padding: 15px;
+  border-radius: 10px;
+  border: 2px solid var(--pokemon-yellow);
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  font-size: 14px;
+  margin-bottom: 20px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+/* --- NOVOS FILTROS --- */
+.pokedex-filtros {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.filtro-grupo {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.filtro-select {
+  flex: 1;
+  min-width: 150px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 2px solid var(--pokemon-yellow);
+  background: #333;
+  color: white;
+  font-size: 13px;
+  outline: none;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.btn-limpar {
+  background: #555;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-limpar:hover {
+  background: #777;
+  color: var(--pokemon-yellow);
+}
+
+#btn-busca {
+  padding: 19px 29px;
+  border-radius: 20px;
+  border: none;
+  background: #ffeb3b;
+  color: #c62828;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#btn-busca:hover {
+  background: #fff;
+  transform: scale(1.05);
+}
+
+/* --------------------------FINAL DA BARRA DE BUSCA-------------------------- */
+
+/* --------------------------INICIO DO GRID DE CARDS-------------------------- */
+.pokedex-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  /* Responsivo */
+  gap: 20px;
+  width: 90%;
+  max-width: 1200px;
+  justify-items: center;
+  /* Centraliza os cards dentro do grid */
+  margin-bottom: 30px;
+}
+
+/* --------------------------FINAL DO GRID DE CARDS-------------------------- */
+
+/* --------------------------INICIO DO ESTILO DO CARD-------------------------- */
+.pokemon-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0.4) 100%);
+  border: 4px solid #fff;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  width: 200px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.pokemon-card:hover {
+  transform: translateY(-10px) rotate(2deg);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7);
+}
+
+.pokemon-card img {
+  width: 120px;
+  height: 120px;
+  filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.2));
+  /* Deixa com efeito de sombra no card */
+}
+
+/* --------------------------FINAL DO ESTILO DO CARD-------------------------- */
+
+/* --------------------------INICIO DAS INFORMÇÕES NOS CARDS-------------------------- */
+.img-container {
+  /* fundo circular branco no pokemon */
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  width: 140px;
+  height: 140px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.info .number {
+  /* numero do pokemon */
+  display: block;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 5px;
+  font-size: 12px;
+  margin-bottom: 5px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
+.info .name {
+  /* nome do pokemon */
+  font-size: 15px;
+  margin: 10px 0;
+  text-transform: capitalize;
+  color: #fff;
+  text-shadow: 1px 1px 0 #000;
+  font-weight: bold;
+}
+
+.info .type {
+  /* tipo do pokemon */
+  font-size: 12px;
+  text-transform: uppercase;
+  margin: 5px 0;
+  color: #fff;
+  text-shadow: 1px 1px 0 #000;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+.info .generation {
+  /* geração do pokemon */
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 1px 1px 0 #000;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
+/* --------------------------FINAL DAS INFORMÇÕES NOS CARDS-------------------------- */
+
+/* --------------------------INICIO DO BOTÃO DE CARREGAR MAIS-------------------------- */
+#btn-carregar {
+  background: #30a7d7;
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 50px;
+}
+
+#btn-carregar:hover {
+  background: #1b82b1;
+}
+
+/* --------------------------FINAL DO BOTÃO DE CARREGAR MAIS-------------------------- */
+.autocomplete-items {
+  position: absolute;
+  border-top: none;
+  z-index: 99;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #333; /* Fundo escuro para combinar com os cards */
+  border-radius: 0 0 10px 10px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #333;
+  border-bottom: 1px solid #444;
+  font-size: 13px;
+  text-align: left;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.autocomplete-items div:hover {
+  background-color: #444;
+  color: #ffeb3b;
+}

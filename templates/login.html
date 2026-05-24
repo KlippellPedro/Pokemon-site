@@ -1,0 +1,31 @@
+{% extends "base.html" %} {% block title %}Login - Pokémon{% endblock %} {% block content %}
+<main class="auth-container">
+  <div class="auth-card">
+    <!-- Ícone decorativo para preencher o espaço -->
+    <img src="{{ url_for('static', filename='uploads/utilidade/poke-ball.png') }}" alt="Pokébola" class="auth-icon" />
+    <h1>LOGIN</h1>
+    <p style="margin-bottom: 20px; color: #ccc; font-size: 14px">Bem-vindo de volta, Treinador!</p>
+
+    <form action="{{ url_for('auth.login') }}" method="POST" class="auth-form">
+      <div class="form-group">
+        <label for="email">E-MAIL</label>
+        <input type="email" name="email" id="email" class="form-control" placeholder="treinador@poke.com" required />
+      </div>
+
+      <div class="form-group">
+        <label for="senha">SENHA</label>
+        <input type="password" name="senha" id="senha" class="form-control" placeholder="********" required />
+      </div>
+
+      <button type="submit" class="btn-abrir">ENTRAR</button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Não tem uma conta? <a href="{{ url_for('auth.register') }}" style="color: var(--pokemon-yellow)">Cadastre-se</a></p>
+      <p style="margin-top: 10px">
+        <a href="{{ url_for('auth.forgot_password') }}" style="text-decoration: none; color: #ccc; font-size: 10px">Esqueci minha senha</a>
+      </p>
+    </div>
+  </div>
+</main>
+{% endblock %}

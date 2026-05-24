@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Pokémon{% endblock %}</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='uploads/utilidade/icon.png') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/reset.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/estilo.css') }}" />
+    {% block extra_css %}{% endblock %}
+  </head>
+  <body>
+    <header class="menu">
+      <a href="{{ url_for('user.index') }}" class="menu-item {% if request.endpoint == 'user.index' %}active{% endif %}">Início</a>
+      <a href="{{ url_for('user.pokedex') }}" class="menu-item {% if request.endpoint == 'user.pokedex' %}active{% endif %}">Pokédex</a>
+      <a href="{{ url_for('user.equipe') }}" class="menu-item {% if request.endpoint == 'user.equipe' %}active{% endif %}">Equipe</a>
+      <a href="{{ url_for('user.pacotes') }}" class="menu-item {% if request.endpoint == 'user.pacotes' %}active{% endif %}">Pacotes</a>
+      <a href="{{ url_for('user.colecao') }}" class="menu-item {% if request.endpoint == 'user.colecao' %}active{% endif %}">Coleção</a>
+      <a href="{{ url_for('user.social') }}" class="menu-item {% if request.endpoint == 'user.social' %}active{% endif %}">Social</a>
+      {% if current_user %} {# Usamos current_user que vem do context processor #}
+      <div class="user-dropdown">
+        <div class="menu-item dropdown-trigger">
+          <img src="{{ url_for('static', filename='uploads/' + current_user.foto) }}" class="menu-icon-user" alt="Conta" />
+          <span>{{ current_user.nome.split(' ')[0] }}</span> {# Mostra o primeiro nome #}
+        </div>
+        <div class="dropdown-content">
+          <a href="{{ url_for('user.perfil') }}">Meu Perfil</a>
+          {% if current_user.is_admin %} {# Mostra o link do Admin apenas se for admin #}
+          <a href="{{ url_for('admin.dashboard') }}">Painel Admin</a>
+          {% endif %}
+          <a href="{{ url_for('auth.logout') }}" class="logout-link">Sair</a>
+        </div>
+      </div>
+      {% else %}
+      <a href="{{ url_for('auth.login') }}" class="menu-item">Login</a>
+      {% endif %}
+    </header>
+
+    <main>
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
+      <div class="flash-messages">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %} {% block content %}{% endblock %}
+    </main>
+    {% block extra_js %}{% endblock %}
+
+    <script>
+      // Lógica para as mensagens sumirem sozinhas (Auto-hide)
+      document.addEventListener("DOMContentLoaded", () => {
+        setTimeout(() => {
+          const alerts = document.querySelectorAll(".alert");
+          alerts.forEach((alert) => {
+            alert.style.opacity = "0";
+            alert.style.transform = "translateY(-20px)";
+            setTimeout(() => alert.remove(), 500);
+          });
+        }, 4000); // 4 segundos
+      });
+    </script>
+
+    {% if session.get('user_id') %}
+    <script>
+      // Desafio Extra: Logout automático após 15 minutos de inatividade
+      (function () {
+        let tempoInatividade;
+        const resetarTimer = () => {
+          clearTimeout(tempoInatividade);
+          tempoInatividade = setTimeout(
+            () => {
+              alert("Sua sessão expirou por inatividade. Faça login novamente.");
+              window.location.href = "{{ url_for('auth.logout') }}";
+            },
+            15 * 60 * 1000,
+          ); // 15 minutos
+        };
+
+        // Monitora qualquer interação do usuário
+        const eventos = ["mousedown", "mousemove", "keypress", "scroll", "touchstart"];
+        eventos.forEach((evt) => document.addEventListener(evt, resetarTimer));
+        resetarTimer();
+      })();
+    </script>
+    {% endif %}
+  </body>
+</html>

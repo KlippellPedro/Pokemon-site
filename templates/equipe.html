@@ -1,0 +1,21 @@
+{% extends "base.html" %} {% block title %}Pokémon - Equipe{% endblock %} {% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/equipe.css') }}" />
+{% endblock %} {% block content %}
+<div class="equipe-container">
+  <h1>MINHA EQUIPE POKÉMON</h1>
+  <p class="subtitulo">Monte seu time dos sonhos (Máximo de 6)</p>
+
+  <div class="busca-equipe">
+    <div style="position: relative; width: 100%">
+      <input type="text" id="input-equipe" placeholder="Digite o nome do Pokémon..." autocomplete="off" />
+      <div id="equipe-autocomplete-list" class="autocomplete-items"></div>
+    </div>
+    <button id="btn-add">CAPTURAR</button>
+  </div>
+
+  <p id="msg-aviso" class="msg-aviso"></p>
+  <section class="time-grid" id="time-grid"></section>
+</div>
+{% endblock %} {% block extra_js %}
+<script src="{{ url_for('static', filename='js/equipe.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %} {% block title %}Minha Coleção - Pokémon{% endblock %} {% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/pokedex.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/pacotes.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/colecao.css') }}" />
+{% endblock %} {% block content %}
+<div class="pokedex-container">
+  <h1 class="titulo-secao">MINHA COLEÇÃO</h1>
+
+  <form method="GET" action="{{ url_for('user.colecao') }}" class="busca-container colecao-filtros">
+    <div style="position: relative; width: 100%; max-width: 500px;">
+      <input type="text" name="nome" placeholder="Filtrar por nome..." value="{{ request.args.get('nome', '') }}" id="pokemon-input" class="filtro-nome" autocomplete="off">
+      <div id="colecao-autocomplete-list" class="autocomplete-items"></div>
+    </div>
+
+    <div class="filtro-grupo">
+        <select name="tipo" class="filtro-tipo">
+            <option value="">Todos os Tipos</option>
+            {% for tipo in tipos %}
+                <option value="{{ tipo }}" {% if request.args.get('tipo') == tipo %}selected{% endif %}>{{ traducao_tipos.get(tipo, tipo|upper) }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" id="btn-busca">FILTRAR</button>
+        <a href="{{ url_for('user.colecao') }}" class="btn-limpar">LIMPAR</a>
+    </div>
+  </form>
+
+  <p class="subtitulo colecao-subtitulo" style="margin-top: 20px;">Você possui <strong>{{ collection|length }}</strong> cartas em sua coleção.</p>
+
+  <div class="pokedex-grid">
+    {% if collection %} {% for pokemon in collection %}
+    <div class="pokemon-card {{ pokemon.tipo }}">
+      <a href="{{ url_for('user.remover_da_colecao', pokemon_id_api=pokemon.pokemon_id_api) }}" class="btn-remover-colecao" onclick="return confirm('Tem certeza que deseja remover {{ pokemon.nome_pokemon|capitalize }} da sua coleção?');">×</a>
+      <div class="img-container">
+        <img src="{{ pokemon.sprite_url }}" alt="{{ pokemon.nome_pokemon }}" />
+      </div>
+      <div class="info">
+        <span class="number">#{{ "%03d" | format(pokemon.pokemon_id_api) }}</span>
+        <h3 class="name">{{ pokemon.nome_pokemon }}</h3>
+        <p class="type">Tipo: {{ traducao_tipos.get(pokemon.tipo, pokemon.tipo|upper) }}</p>
+        <p class="generation" style="font-size: 0.7rem; color: #ccc; margin-top: 10px">Obtido em: {{ pokemon.data_obtencao }}</p>
+      </div>
+    </div>
+    {% endfor %} {% else %}
+    <div class="colecao-vazia">
+      <p>Sua coleção está vazia!</p>
+      <a href="{{ url_for('user.pacotes') }}" class="btn-abrir">IR PARA A LOJA</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/colecao.js') }}"></script>
+{% endblock %}
