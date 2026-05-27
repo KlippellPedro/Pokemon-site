@@ -65,3 +65,13 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for('auth.login'))
+
+@bp.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        # Aqui depois você adiciona a lógica de recuperação de senha (ex: buscar usuário, enviar e-mail)
+        flash('Se o e-mail existir no nosso sistema, um link de recuperação foi enviado!', 'info')
+        return redirect(url_for('auth.login'))
+        
+    return render_template('forgot_password.html')
