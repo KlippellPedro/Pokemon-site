@@ -2,31 +2,81 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/social.css') }}" />
 {% endblock %} {% block content %}
 <div class="social-container">
-  <h1>POKÉDLE DIÁRIO</h1>
+  <h1 data-i18n="social.titulo">POKÉDLE DIÁRIO</h1>
+  <p class="social-subtitulo" data-i18n="social.subtitulo">Adivinhe o Pokémon do dia em 6 tentativas</p>
 
+  <!-- Abas dos modos -->
   <nav class="social-tabs">
-    <button class="tab-btn active" onclick="switchGame('classic')">CLÁSSICO</button>
-    <button class="tab-btn" onclick="switchGame('silhouette')">SILHUETA</button>
+    <button class="tab-btn active" id="tab-classic" onclick="switchGame('classic')" data-i18n="social.classico">CLÁSSICO</button>
+    <button class="tab-btn" id="tab-silhouette" onclick="switchGame('silhouette')" data-i18n="social.silhueta">SILHUETA</button>
+    <button class="tab-btn" id="tab-pixel" onclick="switchGame('pixel')" data-i18n="social.pixel">PIXEL</button>
   </nav>
 
-  <div class="game-container">
-    <div id="silhouette-wrapper" class="hidden">
+  <!-- Zona de jogo -->
+  <div class="game-zone">
+
+    <!-- Visual do modo Silhueta -->
+    <div id="silhouette-wrapper" class="visual-wrapper hidden">
       <div class="silhouette-box">
         <img id="silhouette-img" src="" alt="Quem é esse Pokémon?" />
       </div>
+      <p class="visual-hint" id="silhouette-hint">???</p>
     </div>
 
+    <!-- Visual do modo Pixel -->
+    <div id="pixel-wrapper" class="visual-wrapper hidden">
+      <div class="pixel-box">
+        <canvas id="pixel-canvas" width="200" height="200"></canvas>
+      </div>
+      <p class="visual-hint" id="pixel-hint">???</p>
+    </div>
+
+    <!-- Barra de tentativas (dots) -->
+    <div class="tentativas-bar" id="tentativas-bar">
+      <div class="dot" id="dot-0"></div>
+      <div class="dot" id="dot-1"></div>
+      <div class="dot" id="dot-2"></div>
+      <div class="dot" id="dot-3"></div>
+      <div class="dot" id="dot-4"></div>
+      <div class="dot" id="dot-5"></div>
+    </div>
+
+    <!-- Input de palpite -->
     <div class="busca-wrapper">
       <div class="input-relative">
-        <input type="text" id="game-input" placeholder="Digite o nome do Pokémon..." autocomplete="off" />
+        <input type="text" id="game-input"
+               data-i18n-placeholder="social.placeholder"
+               placeholder="Digite o nome do Pokémon..."
+               autocomplete="off" />
         <div id="social-autocomplete-list" class="autocomplete-items"></div>
       </div>
+      <button id="btn-adivinhar" onclick="tentarAdivinhar()">
+        <span data-i18n="social.adivinhar">ADIVINHAR</span>
+      </button>
     </div>
 
-    <p class="tentativas-texto">Tentativas: <span id="tentativas">0</span></p>
+    <!-- Cabeçalho da tabela de comparação (só no modo clássico) -->
+    <div id="classic-header" class="classic-header hidden">
+      <div class="ch-sprite"></div>
+      <div class="ch-cell ch-nome" data-i18n="social.pokemon">POKÉMON</div>
+      <div class="ch-cell" data-i18n="social.tipo">TIPO</div>
+      <div class="ch-cell" data-i18n="social.cor">COR</div>
+      <div class="ch-cell" data-i18n="social.gen">GEN</div>
+      <div class="ch-cell" data-i18n="social.peso">PESO</div>
+      <div class="ch-cell" data-i18n="social.lendario">LENDÁRIO</div>
+    </div>
 
+    <!-- Lista de palpites -->
     <div id="guesses-container" class="guesses-list"></div>
+  </div><!-- /game-zone -->
+
+  <!-- Painel resultado (vitória/derrota) -->
+  <div id="resultado-overlay" class="resultado-overlay hidden">
+    <div class="resultado-card" id="resultado-card">
+      <!-- conteúdo injetado por JS -->
+    </div>
   </div>
+
 </div>
 {% endblock %} {% block extra_js %}
 <script src="{{ url_for('static', filename='js/social.js') }}"></script>

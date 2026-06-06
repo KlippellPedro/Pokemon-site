@@ -2,40 +2,81 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/pacotes.css') }}" />
 {% endblock %} {% block content %}
 <div class="pacotes-container">
-  <h1>LOJA DE PACOTES</h1>
+  <h1 data-i18n="pacotes.titulo">LOJA DE PACOTES</h1>
 
   <section class="escolha-pacotes" id="secao-escolha">
+
+    <!-- Pacote Básico -->
     <div class="booster-option" id="booster-basico">
       <img src="{{ url_for('static', filename='uploads/utilidade/poke-ball.png') }}" alt="Pacote Básico" class="booster-img" />
       <div class="booster-info">
-        <h3>Pacote Básico</h3>
-        <p>Chance de Pokémon Comuns</p>
+        <div class="booster-badge">5 cartas</div>
+        <h3 data-i18n="pacotes.basico">Pacote Básico</h3>
+        <p data-i18n="pacotes.basico-desc">Chance de Pokémon Comuns</p>
       </div>
-      <button class="btn-abrir">ABRIR</button>
+      <button class="btn-abrir" data-i18n="pacotes.abrir">ABRIR</button>
     </div>
 
+    <!-- Pacote Épico -->
     <div class="booster-option" id="booster-epico">
       <img src="{{ url_for('static', filename='uploads/utilidade/ultra-ball.png') }}" alt="Pacote Épico" class="booster-img" />
       <div class="booster-info">
-        <h3>Pacote Épico</h3>
-        <p>Chance de Pokémon Raros</p>
+        <div class="booster-badge">5 cartas</div>
+        <h3 data-i18n="pacotes.epico">Pacote Épico</h3>
+        <p data-i18n="pacotes.epico-desc">Chance de Pokémon Raros</p>
       </div>
-      <button class="btn-abrir">ABRIR</button>
+      <button class="btn-abrir" data-i18n="pacotes.abrir">ABRIR</button>
     </div>
 
+    <!-- Pacote Lendário -->
     <div class="booster-option" id="booster-lendario">
       <img src="{{ url_for('static', filename='uploads/utilidade/master-ball.png') }}" alt="Pacote Lendário" class="booster-img" />
       <div class="booster-info">
-        <h3>Pacote Lendário</h3>
-        <p>Apenas Pokémon Lendários e Míticos</p>
+        <div class="booster-badge">1 carta</div>
+        <h3 data-i18n="pacotes.lendario">Pacote Lendário</h3>
+        <p data-i18n="pacotes.lendario-desc">Apenas Pokémon Lendários e Míticos</p>
       </div>
-      <button class="btn-abrir">ABRIR</button>
+      <button class="btn-abrir" data-i18n="pacotes.abrir">ABRIR</button>
     </div>
+
+    <!-- Pacote Starter -->
+    <div class="booster-option" id="booster-starter">
+      <img src="{{ url_for('static', filename='uploads/utilidade/poke-ball.png') }}" alt="Pacote Starter" class="booster-img" />
+      <div class="booster-info">
+        <div class="booster-badge">5 cartas</div>
+        <h3 data-i18n="pacotes.starter">Pacote Starter</h3>
+        <p data-i18n="pacotes.starter-desc">Pokémon Iniciais de todas as gerações</p>
+      </div>
+      <button class="btn-abrir" data-i18n="pacotes.abrir">ABRIR</button>
+    </div>
+
+    <!-- Pacote Sombrio -->
+    <div class="booster-option" id="booster-sombrio">
+      <img src="{{ url_for('static', filename='uploads/utilidade/ultra-ball.png') }}" alt="Pacote Sombrio" class="booster-img" />
+      <div class="booster-info">
+        <div class="booster-badge">5 cartas</div>
+        <h3 data-i18n="pacotes.sombrio">Pacote Sombrio</h3>
+        <p data-i18n="pacotes.sombrio-desc">Pokémon Fantasma, Sombrio e Psíquico</p>
+      </div>
+      <button class="btn-abrir" data-i18n="pacotes.abrir">ABRIR</button>
+    </div>
+
+    <!-- Pacote Campeão -->
+    <div class="booster-option" id="booster-campeao">
+      <img src="{{ url_for('static', filename='uploads/utilidade/master-ball.png') }}" alt="Pacote Campeão" class="booster-img" />
+      <div class="booster-info">
+        <div class="booster-badge">10 cartas</div>
+        <h3 data-i18n="pacotes.campeao">Pacote Campeão</h3>
+        <p data-i18n="pacotes.campeao-desc">10 cartas com Lendário garantido</p>
+      </div>
+      <button class="btn-abrir" data-i18n="pacotes.abrir">ABRIR</button>
+    </div>
+
   </section>
 
   <section class="area-revelacao hidden" id="area-revelacao">
     <div id="grid-revelacao" class="grid-revelacao"></div>
-    <button class="btn-voltar" onclick="voltarParaLoja()">Voltar para a Loja</button>
+    <button class="btn-voltar hidden-btn" onclick="voltarParaLoja()" data-i18n="pacotes.voltar">Voltar para a Loja</button>
   </section>
 </div>
 {% endblock %} {% block extra_js %}

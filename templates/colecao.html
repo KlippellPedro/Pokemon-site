@@ -14,9 +14,9 @@
 
     <div class="filtro-grupo">
         <select name="tipo" class="filtro-tipo">
-            <option value="">Todos os Tipos</option>
+            <option value="" data-i18n="pokedex.todos-tipos">Todos os Tipos</option>
             {% for tipo in tipos %}
-                <option value="{{ tipo }}" {% if request.args.get('tipo') == tipo %}selected{% endif %}>{{ traducao_tipos.get(tipo, tipo|upper) }}</option>
+                <option value="{{ tipo }}" data-tipo="{{ tipo }}" {% if request.args.get('tipo') == tipo %}selected{% endif %}>{{ traducao_tipos.get(tipo, tipo|upper) }}</option>
             {% endfor %}
         </select>
         <button type="submit" id="btn-busca">FILTRAR</button>
@@ -26,19 +26,26 @@
 
   <p class="subtitulo colecao-subtitulo" style="margin-top: 20px;">Você possui <strong>{{ collection|length }}</strong> cartas em sua coleção.</p>
 
-  <div class="pokedex-grid">
+  <div class="pokedex-grid colecao-grid">
     {% if collection %} {% for pokemon in collection %}
-    <div class="pokemon-card {{ pokemon.tipo }}">
-      <a href="{{ url_for('user.remover_da_colecao', pokemon_id_api=pokemon.pokemon_id_api) }}" class="btn-remover-colecao" onclick="return confirm('Tem certeza que deseja remover {{ pokemon.nome_pokemon|capitalize }} da sua coleção?');">×</a>
+    <div class="pokemon-card {{ pokemon.tipo }}"
+         data-pokemon-id="{{ pokemon.pokemon_id_api }}"
+         data-tipo="{{ pokemon.tipo }}">
+      <div class="card-col-header">
+        <span class="card-col-name">{{ pokemon.nome_pokemon|capitalize }}</span>
+        <span class="card-col-num">#{{ "%03d" | format(pokemon.pokemon_id_api) }}</span>
+      </div>
       <div class="img-container">
         <img src="{{ pokemon.sprite_url }}" alt="{{ pokemon.nome_pokemon }}" />
       </div>
-      <div class="info">
-        <span class="number">#{{ "%03d" | format(pokemon.pokemon_id_api) }}</span>
-        <h3 class="name">{{ pokemon.nome_pokemon }}</h3>
-        <p class="type">Tipo: {{ traducao_tipos.get(pokemon.tipo, pokemon.tipo|upper) }}</p>
-        <p class="generation" style="font-size: 0.7rem; color: #ccc; margin-top: 10px">Obtido em: {{ pokemon.data_obtencao }}</p>
+      <div class="card-col-footer">
+        <span class="type-badge" data-tipo="{{ pokemon.tipo }}">{{ traducao_tipos.get(pokemon.tipo, pokemon.tipo|upper) }}</span>
+        <span class="date-obtido">{{ pokemon.data_obtencao }}</span>
       </div>
+      <a href="{{ url_for('user.remover_da_colecao', pokemon_id_api=pokemon.pokemon_id_api) }}"
+         class="btn-remover-colecao"
+         onclick="return confirm('Remover {{ pokemon.nome_pokemon|capitalize }} da coleção?')">×</a>
+      <div class="holo-overlay"></div>
     </div>
     {% endfor %} {% else %}
     <div class="colecao-vazia">

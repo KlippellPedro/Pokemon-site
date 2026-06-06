@@ -2,15 +2,15 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/equipe.css') }}" />
 {% endblock %} {% block content %}
 <div class="equipe-container">
-  <h1>MINHA EQUIPE POKÉMON</h1>
-  <p class="subtitulo">Monte seu time dos sonhos (Máximo de 6)</p>
+  <h1 data-i18n="equipe.titulo">MINHA EQUIPE POKÉMON</h1>
+  <p class="subtitulo" data-i18n="equipe.subtitulo">Monte seu time dos sonhos (Máximo de 6)</p>
 
   <div class="busca-equipe">
     <div style="position: relative; width: 100%">
-      <input type="text" id="input-equipe" placeholder="Digite o nome do Pokémon..." autocomplete="off" />
+      <input type="text" id="input-equipe" data-i18n-placeholder="equipe.placeholder" placeholder="Digite o nome do Pokémon..." autocomplete="off" />
       <div id="equipe-autocomplete-list" class="autocomplete-items"></div>
     </div>
-    <button id="btn-add">CAPTURAR</button>
+    <button id="btn-add" data-i18n="equipe.capturar">CAPTURAR</button>
   </div>
 
   <p id="msg-aviso" class="msg-aviso"></p>

@@ -1,41 +1,75 @@
-{% extends "base.html" %} {% block title %}Meu Perfil - Pokémon{% endblock %} {% block extra_css %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}" />
-{% endblock %} {% block content %}
+{% extends "base.html" %} {% block title %}Meu Perfil - Pokémon{% endblock %} {% block content %}
 <div class="pokedex-container">
   <h1>MEU PERFIL</h1>
-  <div class="destaque-content perfil-destaque">
-    <img src="{{ url_for('static', filename='uploads/' + user.foto) }}" alt="Foto de Perfil" class="pokemon-flutuante perfil-foto" />
 
-    <form action="{{ url_for('user.perfil') }}" method="POST" enctype="multipart/form-data" class="info-destaque perfil-form-container">
-      <div class="perfil-field-group">
-        <label>NOME</label>
-        <input type="text" name="nome" value="{{ user.nome }}" required class="form-control" />
+  <div class="perfil-card">
+    <div class="perfil-body">
 
-        <label>E-MAIL</label>
-        <input type="email" name="email" value="{{ user.email }}" required class="form-control" />
-
-        {% if user.precisa_resetar %}
-        <label>NOVA SENHA</label>
-        <input type="password" name="senha" class="form-control" placeholder="Digite a nova senha" required />
-
-        <label>CONFIRMAR NOVA SENHA</label>
-        <input type="password" name="confirma_senha" class="form-control" placeholder="Confirme a nova senha" required />
-        {% endif %}
-
-        <label for="foto">ALTERAR FOTO DE PERFIL</label>
-        <div class="file-upload-wrapper" style="margin-top: 5px">
-          <input
-            type="file"
-            name="foto"
-            id="foto"
-            class="file-input-hidden"
-            onchange="this.nextElementSibling.innerText = this.files[0] ? this.files[0].name : '📷 Escolher Nova Foto...'"
-          />
-          <label for="foto" class="file-input-label">Escolher Nova Foto...</label>
-        </div>
+      <!-- Coluna Avatar -->
+      <div class="perfil-avatar-col">
+        <form action="{{ url_for('user.perfil') }}" method="POST" enctype="multipart/form-data" id="form-avatar">
+          <div class="perfil-avatar-wrap" onclick="document.getElementById('foto-input').click()">
+            <img src="{{ url_for('static', filename='uploads/' + user.foto) }}"
+                 alt="Foto de Perfil"
+                 class="perfil-avatar"
+                 id="avatar-preview" />
+            <label class="perfil-avatar-edit-label" title="Alterar foto">✎</label>
+          </div>
+          <input type="file" name="foto" id="foto-input" class="file-input-hidden"
+                 accept="image/*"
+                 onchange="previewAvatar(this); this.form.submit();" />
+        </form>
+        <p class="perfil-user-nome">{{ user.nome }}</p>
+        <p class="perfil-user-email">{{ user.email }}</p>
       </div>
-      <button type="submit" class="btn-abrir" style="margin-top: 20px">ATUALIZAR DADOS</button>
-    </form>
+
+      <!-- Coluna Formulário -->
+      <div class="perfil-form-col">
+        <h2>EDITAR DADOS</h2>
+
+        <form action="{{ url_for('user.perfil') }}" method="POST" enctype="multipart/form-data" class="auth-form" style="padding: 0; gap: 16px;">
+          <div class="form-group">
+            <label for="nome">NOME</label>
+            <input type="text" name="nome" id="nome" value="{{ user.nome }}"
+                   required class="form-control" />
+          </div>
+
+          <div class="form-group">
+            <label for="email">E-MAIL</label>
+            <input type="email" name="email" id="email" value="{{ user.email }}"
+                   required class="form-control" />
+          </div>
+
+          {% if user.precisa_resetar %}
+          <div class="form-group">
+            <label for="senha">NOVA SENHA</label>
+            <input type="password" name="senha" id="senha"
+                   class="form-control" placeholder="Digite a nova senha" required />
+          </div>
+          <div class="form-group">
+            <label for="confirma_senha">CONFIRMAR NOVA SENHA</label>
+            <input type="password" name="confirma_senha" id="confirma_senha"
+                   class="form-control" placeholder="Confirme a nova senha" required />
+          </div>
+          {% endif %}
+
+          <button type="submit" class="btn-abrir" style="margin-top: 6px;">SALVAR ALTERAÇÕES</button>
+        </form>
+      </div>
+
+    </div>
   </div>
 </div>
+
+<script>
+  function previewAvatar(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('avatar-preview').src = e.target.result;
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>
 {% endblock %}

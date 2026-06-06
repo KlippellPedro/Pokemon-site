@@ -8,32 +8,46 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/reset.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/estilo.css') }}" />
     {% block extra_css %}{% endblock %}
+    <!-- Aplica o tema antes do render para evitar flash -->
+    <script>
+      (function () {
+        var t = localStorage.getItem("pokemon-theme") || "dark";
+        document.documentElement.setAttribute("data-theme", t);
+      })();
+    </script>
   </head>
   <body>
     <header class="menu">
-      <a href="{{ url_for('user.index') }}" class="menu-item {% if request.endpoint == 'user.index' %}active{% endif %}">Início</a>
-      <a href="{{ url_for('user.pokedex') }}" class="menu-item {% if request.endpoint == 'user.pokedex' %}active{% endif %}">Pokédex</a>
-      <a href="{{ url_for('user.equipe') }}" class="menu-item {% if request.endpoint == 'user.equipe' %}active{% endif %}">Equipe</a>
-      <a href="{{ url_for('user.pacotes') }}" class="menu-item {% if request.endpoint == 'user.pacotes' %}active{% endif %}">Pacotes</a>
-      <a href="{{ url_for('user.colecao') }}" class="menu-item {% if request.endpoint == 'user.colecao' %}active{% endif %}">Coleção</a>
-      <a href="{{ url_for('user.social') }}" class="menu-item {% if request.endpoint == 'user.social' %}active{% endif %}">Social</a>
-      {% if current_user %} {# Usamos current_user que vem do context processor #}
-      <div class="user-dropdown">
-        <div class="menu-item dropdown-trigger">
-          <img src="{{ url_for('static', filename='uploads/' + current_user.foto) }}" class="menu-icon-user" alt="Conta" />
-          <span>{{ current_user.nome.split(' ')[0] }}</span> {# Mostra o primeiro nome #}
+      <nav class="menu-nav">
+        <a href="{{ url_for('user.index') }}" class="menu-item {% if request.endpoint == 'user.index' %}active{% endif %}" data-i18n="nav.inicio">Início</a>
+        <a href="{{ url_for('user.pokedex') }}" class="menu-item {% if request.endpoint == 'user.pokedex' %}active{% endif %}" data-i18n="nav.pokedex">Pokédex</a>
+        <a href="{{ url_for('user.equipe') }}" class="menu-item {% if request.endpoint == 'user.equipe' %}active{% endif %}" data-i18n="nav.equipe">Equipe</a>
+        <a href="{{ url_for('user.pacotes') }}" class="menu-item {% if request.endpoint == 'user.pacotes' %}active{% endif %}" data-i18n="nav.pacotes">Pacotes</a>
+        <a href="{{ url_for('user.colecao') }}" class="menu-item {% if request.endpoint == 'user.colecao' %}active{% endif %}" data-i18n="nav.colecao">Coleção</a>
+        <a href="{{ url_for('user.social') }}" class="menu-item {% if request.endpoint == 'user.social' %}active{% endif %}" data-i18n="nav.social">Social</a>
+        {% if current_user %}
+        <div class="user-dropdown">
+          <div class="menu-item dropdown-trigger">
+            <img src="{{ url_for('static', filename='uploads/' + current_user.foto) }}" class="menu-icon-user" alt="Conta" />
+            <span>{{ current_user.nome.split(' ')[0] }}</span>
+          </div>
+          <div class="dropdown-content">
+            <a href="{{ url_for('user.perfil') }}" data-i18n="nav.meu-perfil">Meu Perfil</a>
+            {% if current_user.is_admin %}
+            <a href="{{ url_for('admin.dashboard') }}" data-i18n="nav.admin">Painel Admin</a>
+            {% endif %}
+            <a href="{{ url_for('auth.logout') }}" class="logout-link" data-i18n="nav.sair">Sair</a>
+          </div>
         </div>
-        <div class="dropdown-content">
-          <a href="{{ url_for('user.perfil') }}">Meu Perfil</a>
-          {% if current_user.is_admin %} {# Mostra o link do Admin apenas se for admin #}
-          <a href="{{ url_for('admin.dashboard') }}">Painel Admin</a>
-          {% endif %}
-          <a href="{{ url_for('auth.logout') }}" class="logout-link">Sair</a>
-        </div>
+        {% else %}
+        <a href="{{ url_for('auth.login') }}" class="menu-item" data-i18n="nav.login">Login</a>
+        {% endif %}
+      </nav>
+
+      <div class="menu-controls">
+        <button class="btn-toggle" id="btn-tema" onclick="toggleTheme()" title="Alternar Tema">CLARO</button>
+        <button class="btn-toggle" id="btn-lang" onclick="toggleLang()" title="Switch Language">EN</button>
       </div>
-      {% else %}
-      <a href="{{ url_for('auth.login') }}" class="menu-item">Login</a>
-      {% endif %}
     </header>
 
     <main>
@@ -45,6 +59,8 @@
       </div>
       {% endif %} {% endwith %} {% block content %}{% endblock %}
     </main>
+
+    <script src="{{ url_for('static', filename='js/theme-lang.js') }}"></script>
     {% block extra_js %}{% endblock %}
 
     <script>
@@ -57,13 +73,13 @@
             alert.style.transform = "translateY(-20px)";
             setTimeout(() => alert.remove(), 500);
           });
-        }, 4000); // 4 segundos
+        }, 4000);
       });
     </script>
 
     {% if session.get('user_id') %}
     <script>
-      // Desafio Extra: Logout automático após 15 minutos de inatividade
+      // Logout automático após 15 minutos de inatividade
       (function () {
         let tempoInatividade;
         const resetarTimer = () => {
@@ -74,10 +90,8 @@
               window.location.href = "{{ url_for('auth.logout') }}";
             },
             15 * 60 * 1000,
-          ); // 15 minutos
+          );
         };
-
-        // Monitora qualquer interação do usuário
         const eventos = ["mousedown", "mousemove", "keypress", "scroll", "touchstart"];
         eventos.forEach((evt) => document.addEventListener(evt, resetarTimer));
         resetarTimer();

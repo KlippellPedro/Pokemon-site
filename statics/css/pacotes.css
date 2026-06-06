@@ -1,6 +1,5 @@
-/* --------------------------INICIO DA PARTE DOS BOOSTERS DE POKEMON-------------------------- */
+/* ===== CONTAINER PRINCIPAL ===== */
 .pacotes-container {
-  /* formata a main dos pacotes */
   padding-top: 100px;
   display: flex;
   flex-direction: column;
@@ -9,95 +8,142 @@
   min-height: 100vh;
 }
 
+/* ===== GRID DE SELEÇÃO DOS PACOTES ===== */
 .escolha-pacotes {
-  /* formata o selection da parte de pacotes */
-  display: flex;
-  gap: 40px;
-  margin-top: 50px;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  margin: 40px auto;
+  width: 95%;
+  max-width: 1200px;
+  justify-items: center;
 }
 
 .booster-option {
-  /* formata a parte cinza dos boosters */
-  background: #333;
-  border: 4px solid #555;
+  background: rgba(30, 30, 30, 0.85);
+  border: 3px solid #555;
   border-radius: 20px;
-  width: 300px;
-  padding: 30px;
+  width: 240px;
+  padding: 24px 20px;
   text-align: center;
   cursor: pointer;
-  transition: 0.3s;
+  transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s, background 0.25s;
   display: flex;
   flex-direction: column;
   align-items: center;
+  backdrop-filter: blur(6px);
 }
 
 .booster-option:hover {
-  /* formata a parte cinza quando passa o mouse por cima dela */
   border-color: #ffeb3b;
-  transform: scale(1.05);
-  background: #444;
+  transform: translateY(-6px) scale(1.03);
+  background: rgba(50, 50, 50, 0.95);
+  box-shadow: 0 8px 30px rgba(255, 235, 59, 0.3);
 }
+
+/* Cores de destaque por tipo de pacote */
+.booster-option.booster-lendario { border-color: #9c27b0; }
+.booster-option.booster-lendario:hover { border-color: #e040fb; box-shadow: 0 8px 30px rgba(156,39,176,0.5); }
+
+.booster-option.booster-campeao { border-color: #ffd700; }
+.booster-option.booster-campeao:hover { border-color: #fff176; box-shadow: 0 8px 30px rgba(255,215,0,0.5); }
+
+.booster-option.booster-sombrio { border-color: #7e57c2; }
+.booster-option.booster-sombrio:hover { border-color: #b39ddb; box-shadow: 0 8px 30px rgba(126,87,194,0.5); }
+
+.booster-option.booster-starter { border-color: #43a047; }
+.booster-option.booster-starter:hover { border-color: #81c784; box-shadow: 0 8px 30px rgba(67,160,71,0.4); }
 
 .booster-img {
-  /* formata a imagem das pokebolas dos boosters*/
-  width: 100px;
-  margin-bottom: 20px;
+  width: 90px;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+  transition: transform 0.3s;
+}
+.booster-option:hover .booster-img {
+  transform: rotate(-8deg) scale(1.1);
 }
 
+/* Filtro de cor nas bolinhas reutilizadas */
+#booster-starter   .booster-img { filter: hue-rotate(110deg) saturate(1.8) drop-shadow(0 4px 8px rgba(0,0,0,0.4)); }
+#booster-sombrio   .booster-img { filter: hue-rotate(230deg) saturate(1.4) drop-shadow(0 4px 8px rgba(0,0,0,0.4)); }
+#booster-campeao   .booster-img { filter: sepia(1) saturate(4) hue-rotate(5deg) drop-shadow(0 4px 8px rgba(0,0,0,0.4)); }
+
 .booster-info h3 {
-  /* Formata o texto do h3 pra essa pagina */
   font-weight: bold;
-  font-size: 18px;
-  margin-bottom: 10px;
+  font-size: 16px;
+  margin-bottom: 8px;
   color: #fff;
 }
 
 .booster-info p {
-  /* Formata o p pra essa pagina */
   font-size: 11px;
-  color: #ccc;
-  margin-bottom: 25px;
+  color: #bbb;
+  margin-bottom: 20px;
+  line-height: 1.4;
 }
 
-/* --------------------------FIM DA PARTE DOS BOOSTERS DE POKEMON-------------------------- */
-
-.hidden {
-  display: none !important;
+/* Badge de nº de cartas */
+.booster-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-size: 10px;
+  color: #ddd;
+  margin-bottom: 14px;
+  letter-spacing: 0.5px;
 }
 
+/* ===== ÁREA DE REVELAÇÃO ===== */
 .area-revelacao {
   text-align: center;
-  margin-top: 50px;
+  margin-top: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  width: 100%;
 }
 
 .grid-revelacao {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  justify-content: center;
   width: 95%;
-  max-width: 1100px;
+  max-width: 1200px;
   margin-bottom: 30px;
-  perspective: 1000px; /* Necessário para o efeito 3D */
+  perspective: 1200px;
 }
 
+.pacotes-loading {
+  color: white;
+  font-size: 16px;
+  padding: 40px;
+  width: 100%;
+}
+
+/* ===== CARD TCG — WRAPPER E FLIP ===== */
 .card-reveal-wrapper {
-  width: 180px;
-  height: 280px;
-  perspective: 1000px;
+  width: 175px;
+  height: 245px;
+  perspective: 1200px;
   cursor: pointer;
+  animation: cardEntrar 0.4s ease-out both;
+}
+
+@keyframes cardEntrar {
+  from { opacity: 0; transform: translateY(30px) scale(0.85); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
 }
 
 .card-inner {
   position: relative;
   width: 100%;
   height: 100%;
-  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
 }
 
@@ -112,107 +158,277 @@
   height: 100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  border-radius: 15px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  border-radius: 14px;
   box-sizing: border-box;
 }
 
+/* ===== VERSO DO CARD ===== */
 .card-back {
   background: linear-gradient(135deg, #c62828 0%, #8e1a1a 100%);
-  border: 5px solid #ffeb3b;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  border: 4px solid #ffeb3b;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
   z-index: 2;
   padding: 0;
+  overflow: hidden;
 }
 
+/* ===== FRENTE DO CARD (TCG design) ===== */
 .card-front {
   transform: rotateY(180deg);
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 3px solid #ffeb3b;
+  background: #1a1a2e;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
 }
 
 .card-revelado {
-  border: 5px solid #ffeb3b;
-  background: rgba(0, 0, 0, 0.9);
-  border-radius: 15px;
-  padding: 15px;
+  border-radius: 14px;
   width: 100%;
   height: 100%;
+  position: relative;
 }
 
-.card-revelado img {
-  width: 130px;
+/* Topo colorido do card */
+.card-topo {
+  padding: 7px 10px 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px 10px 0 0;
+  flex-shrink: 0;
 }
 
-/* Raridades */
-.raridade-comum {
-  border-color: #777 !important;
-}
-.raridade-raro {
-  border-color: #ffeb3b !important;
-  box-shadow: 0 0 15px rgba(255, 235, 59, 0.4);
+.card-nome {
+  font-size: 9px;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 105px;
 }
 
+.card-hp {
+  font-size: 9px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Arte do Pokémon */
+.card-arte {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.08);
+  margin: 0 6px;
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.card-arte img {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
+  transition: transform 0.3s;
+}
+
+.card-inner:hover .card-arte img {
+  transform: scale(1.08);
+}
+
+/* Rodapé do card */
+.card-rodape {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 8px 3px;
+  flex-shrink: 0;
+}
+
+.card-tipo-label {
+  font-size: 8px;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 10px;
+  color: #fff;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-numero {
+  font-size: 8px;
+  color: #aaa;
+  font-family: monospace;
+}
+
+/* Estrelas de raridade */
+.card-raridade {
+  text-align: center;
+  font-size: 11px;
+  padding: 2px 0 5px;
+  flex-shrink: 0;
+  letter-spacing: 1px;
+}
+
+.raridade-comum .card-raridade  { color: #888; }
+.raridade-raro .card-raridade   { color: #ffeb3b; }
+.efeito-lendario .card-raridade { color: #e040fb; }
+
+/* ===== EFEITOS DE RARIDADE ===== */
+
+/* Raro — borda dourada + shimmer holográfico */
+.raridade-raro.card-front {
+  border-color: #ffeb3b;
+  box-shadow: 0 0 18px rgba(255,235,59,0.5), 0 6px 20px rgba(0,0,0,0.6);
+}
+
+.raridade-raro .holo-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background: linear-gradient(
+    -55deg,
+    rgba(255,0,128,0.18) 0%,
+    rgba(255,165,0,0.15) 20%,
+    rgba(255,255,0,0.12) 35%,
+    rgba(0,255,128,0.15) 50%,
+    rgba(0,180,255,0.15) 65%,
+    rgba(100,0,255,0.18) 80%,
+    rgba(255,0,128,0.18) 100%
+  );
+  background-size: 300% 300%;
+  animation: holoShift 3.5s ease infinite;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+/* Shimmer de luz passando */
+.raridade-raro .holo-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255,255,255,0.35) 50%,
+    transparent 70%
+  );
+  animation: shimmerPass 2.8s ease-in-out infinite;
+}
+
+/* Lendário — borda roxa pulsante + shimmer dourado-roxo */
+.efeito-lendario.card-front {
+  border-color: #9c27b0;
+  box-shadow:
+    0 0 25px rgba(156,39,176,0.7),
+    0 0 50px rgba(224,64,251,0.3),
+    0 6px 20px rgba(0,0,0,0.6);
+  animation: brilhoLendario 2s infinite alternate;
+}
+
+.efeito-lendario .holo-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background: linear-gradient(
+    -45deg,
+    rgba(255,215,0,0.25) 0%,
+    rgba(255,255,255,0.2)  25%,
+    rgba(148,0,211,0.3)   50%,
+    rgba(255,215,0,0.25)  75%,
+    rgba(255,100,0,0.2)   100%
+  );
+  background-size: 300% 300%;
+  animation: holoShift 1.8s ease infinite;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.efeito-lendario .holo-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background: linear-gradient(
+    115deg,
+    transparent 25%,
+    rgba(255,255,255,0.5) 50%,
+    transparent 75%
+  );
+  animation: shimmerPass 1.6s ease-in-out infinite;
+}
+
+/* ===== KEYFRAMES ===== */
+@keyframes holoShift {
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
+}
+
+@keyframes shimmerPass {
+  0%   { transform: translateX(-120%) skewX(-15deg); }
+  100% { transform: translateX(220%)  skewX(-15deg); }
+}
+
+@keyframes brilhoLendario {
+  from { box-shadow: 0 0 20px #9c27b0, 0 6px 20px rgba(0,0,0,0.6); }
+  to   { box-shadow: 0 0 40px #9c27b0, 0 0 70px #e040fb, 0 6px 20px rgba(0,0,0,0.6); }
+}
+
+/* ===== BOTÃO VOLTAR ===== */
 .btn-voltar {
-  /* formata o botão de voltar para ver os outros pacotes */
   background: #c62828;
   color: white;
   border: 4px solid #8e1a1a;
-  padding: 15px 30px;
-  border-radius: 10px;
+  padding: 14px 32px;
+  border-radius: 12px;
   cursor: pointer;
   font-weight: bold;
   font-size: 13px;
-  transition: 0.3s;
-  display: block;
+  transition: background 0.25s, transform 0.25s;
 }
 
 .btn-voltar:hover {
-  /* formata para quando passam o mouse por cima do botão voltar */
   background: #ff1744;
   transform: scale(1.05);
 }
 
-.efeito-lendario {
-  /* formata o efeito especial para o card Lendário */
-  border-color: #9c27b0 !important;
-  /* (!important) é uma tag que faz com que ela seja priorizada ao invez de outras tags, entçaoela faz o amarelo sair e ficar o roxo */
-  box-shadow:
-    0 0 30px #9c27b0,
-    inset 0 0 15px #9c27b0;
-  background: rgba(156, 39, 176, 0.2) !important;
-  animation: brilhoLendario 2s infinite alternate !important;
+.hidden-btn {
+  visibility: hidden;
+  pointer-events: none;
 }
 
-@keyframes brilhoLendario {
-  from {
-    box-shadow: 0 0 20px #9c27b0;
-  }
-  to {
-    box-shadow:
-      0 0 40px #9c27b0,
-      0 0 60px #e040fb;
-  }
+/* ===== TEMA CLARO — overrides pacotes ===== */
+[data-theme="light"] .booster-option {
+  background: rgba(255,255,255,0.85);
+  border-color: #ccc;
 }
 
-/* ANIMAÇÃO DE REVELAÇÃO */
-@keyframes revelar {
-  /* Animação de revelar o card do pokemon */
-  0% {
-    transform: scale(0);
-    opacity: 0;
-  }
-
-  80% {
-    transform: scale(1.1);
-  }
-
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+[data-theme="light"] .booster-option:hover {
+  background: rgba(255,255,255,0.95);
 }
 
-/* --------------------------FIM DA ÁREA DE REVELAÇÃO DO POKEMON-------------------------- */
+[data-theme="light"] .booster-info h3 {
+  color: #1a1a2e;
+}
+
+[data-theme="light"] .booster-info p {
+  color: #555;
+}
+
+[data-theme="light"] .pacotes-loading {
+  color: var(--text-color);
+}

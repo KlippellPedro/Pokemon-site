@@ -52,15 +52,18 @@ async function carregarPokemonDestaque() {
         }
 
         // Se houver um ID forçado, verificamos se o cache já tem esse ID específico
+        const langAtualCache = (typeof _langAtual !== 'undefined') ? _langAtual : 'pt';
+
         if (idForcado) {
-            if (cacheDestaque && cacheDestaque.pokeData.id === idForcado) {
-                atualizarTelaDestaque(cacheDestaque.pokeData, cacheDestaque.descricao);
+            if (cacheDestaque && cacheDestaque.pokeData.id === idForcado && cacheDestaque.descricao_en) {
+                const desc = langAtualCache === 'pt' ? (cacheDestaque.descricao_pt || cacheDestaque.descricao_en) : cacheDestaque.descricao_en;
+                atualizarTelaDestaque(cacheDestaque.pokeData, desc);
                 return;
             }
         } else {
-            // Se não houver ID forçado, usamos o cache diário normal (se não for um override antigo)
-            if (cacheDestaque && cacheDestaque.data === hoje && !cacheDestaque.adminOverride) {
-                atualizarTelaDestaque(cacheDestaque.pokeData, cacheDestaque.descricao);
+            if (cacheDestaque && cacheDestaque.data === hoje && !cacheDestaque.adminOverride && cacheDestaque.descricao_en) {
+                const desc = langAtualCache === 'pt' ? (cacheDestaque.descricao_pt || cacheDestaque.descricao_en) : cacheDestaque.descricao_en;
+                atualizarTelaDestaque(cacheDestaque.pokeData, desc);
                 return;
             }
         }
@@ -76,19 +79,22 @@ async function carregarPokemonDestaque() {
         const resSpecies = await fetch(pokeData.species.url);
         const speciesData = await resSpecies.json();
 
-        // Tenta encontrar a descrição em Espanhol (es) ou Inglês (en) - a API não tem muito em PT-BR
-        const entry = speciesData.flavor_text_entries.find(entry => entry.language.name === 'en') || speciesData.flavor_text_entries[0];
-        const descricao = entry ? entry.flavor_text : "No description available.";
+        const entryEN = speciesData.flavor_text_entries.find(e => e.language.name === 'en') || speciesData.flavor_text_entries[0];
+        const entryPT = speciesData.flavor_text_entries.find(e => e.language.name === 'pt-br');
+        const descEN = entryEN ? entryEN.flavor_text : 'No description available.';
+        const descPT = entryPT ? entryPT.flavor_text : descEN; // fallback para inglês
 
         // Salva no localStorage para as próximas visitas de hoje
         localStorage.setItem('pokemonDestaqueCache', JSON.stringify({
             data: hoje,
             pokeData: pokeData,
-            descricao: descricao,
+            descricao_en: descEN,
+            descricao_pt: descPT,
             adminOverride: !!idForcado
         }));
 
-        atualizarTelaDestaque(pokeData, descricao);
+        const langAtual = (typeof _langAtual !== 'undefined') ? _langAtual : 'pt';
+        atualizarTelaDestaque(pokeData, langAtual === 'pt' ? descPT : descEN);
 
     } catch (e) {
         console.error("Erro ao carregar destaque", e);
@@ -96,20 +102,16 @@ async function carregarPokemonDestaque() {
     }
 }
 
+// Tradução de tipo usando sistema global (theme-lang.js)
+function getTipoTraduzidoIndex(tipo) {
+    if (typeof t === 'function') return t('tipo.' + tipo) || tipo.toUpperCase();
+    return tipo.toUpperCase();
+}
+
 // 3. Pega os dados baixados e joga no HTML
 function atualizarTelaDestaque(pokeData, descricao) {
     const tipoPrincipalIngles = pokeData.types[0].type.name;
 
-    // Dicionário para traduzir o nome do tipo que aparece na tela
-    const traducaoTipos = {
-        normal: 'NORMAL', fire: 'FOGO', water: 'ÁGUA', electric: 'ELÉTRICO',
-        grass: 'GRAMA', ice: 'GELO', fighting: 'LUTADOR', poison: 'VENENO',
-        ground: 'TERRA', flying: 'VOADOR', psychic: 'PSÍQUICO', bug: 'INSETO',
-        rock: 'PEDRA', ghost: 'FANTASMA', dragon: 'DRAGÃO', dark: 'SOMBRIO',
-        steel: 'AÇO', fairy: 'FADA'
-    };
-
-    // Atualiza Textos e Imagens
     imgDestaque.style.opacity = 0;
     setTimeout(() => {
         imgDestaque.src = pokeData.sprites.other['official-artwork'].front_default || pokeData.sprites.front_default;
@@ -118,9 +120,9 @@ function atualizarTelaDestaque(pokeData, descricao) {
 
     nomeDestaque.innerText = pokeData.name.toUpperCase();
 
-    // Aplica a tradução e a classe de cor
     tipoDestaque.className = `tipo ${tipoPrincipalIngles}`;
-    tipoDestaque.innerText = traducaoTipos[tipoPrincipalIngles] || tipoPrincipalIngles.toUpperCase();
+    tipoDestaque.setAttribute('data-tipo', tipoPrincipalIngles);
+    tipoDestaque.innerText = getTipoTraduzidoIndex(tipoPrincipalIngles);
 
     // Limpeza da descrição (Removendo quebras de linha estranhas da API)
     descDestaque.innerText = descricao.replace(/[\n\f\r]/g, " ");
@@ -141,6 +143,22 @@ function atualizarTelaDestaque(pokeData, descricao) {
     barDef.style.width = calcWidth(def);
     barSpd.style.width = calcWidth(spd);
 }
+
+// Quando o idioma muda: atualiza tipo e descrição do destaque
+document.addEventListener('langChanged', function (e) {
+    const lang = e.detail.lang;
+
+    // Atualiza o tipo exibido
+    const tipo = tipoDestaque ? tipoDestaque.getAttribute('data-tipo') : null;
+    if (tipo && tipoDestaque) tipoDestaque.innerText = getTipoTraduzidoIndex(tipo);
+
+    // Atualiza a descrição a partir do cache
+    const cache = JSON.parse(localStorage.getItem('pokemonDestaqueCache'));
+    if (cache && descDestaque) {
+        const desc = lang === 'pt' ? (cache.descricao_pt || cache.descricao_en) : (cache.descricao_en || cache.descricao_pt);
+        if (desc) descDestaque.innerText = desc.replace(/[\n\f\r]/g, ' ');
+    }
+});
 
 // Quando a página abrir, executa as funções
 carregarEstatisticas();

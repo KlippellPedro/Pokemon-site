@@ -22,14 +22,21 @@ let listaNomesPokemons = [];
 const cacheTipos = {};
 const cacheGens = {};
 
-// Dicionário de tradução para os tipos
-const traducaoTipos = {
-    normal: 'NORMAL', fire: 'FOGO', water: 'ÁGUA', electric: 'ELÉTRICO',
-    grass: 'GRAMA', ice: 'GELO', fighting: 'LUTADOR', poison: 'VENENO',
-    ground: 'TERRA', flying: 'VOADOR', psychic: 'PSÍQUICO', bug: 'INSETO',
-    rock: 'PEDRA', ghost: 'FANTASMA', dragon: 'DRAGÃO', dark: 'SOMBRIO',
-    steel: 'AÇO', fairy: 'FADA'
-};
+// Tradução de tipo via sistema de idioma global (theme-lang.js)
+function getTipoTraduzido(tipo) {
+    if (typeof t === 'function') return t('tipo.' + tipo) || tipo.toUpperCase();
+    return tipo.toUpperCase();
+}
+
+function getLabelTipo() {
+    if (typeof _langAtual !== 'undefined') return _langAtual === 'en' ? 'Type' : 'Tipo';
+    return 'Tipo';
+}
+
+function getLabelGen() {
+    if (typeof _langAtual !== 'undefined') return _langAtual === 'en' ? 'GEN' : 'GER';
+    return 'GER';
+}
 
 // ============================================================
 // 1. SISTEMA DE AUTOCOMPLETE (PESQUISA COM SUGESTÃO)
@@ -239,16 +246,12 @@ function createPokemonCard(pokemon) {
     if (!pokedexList) return; // Segurança: Se não houver a lista na tela, não tenta criar o card
 
     const card = document.createElement('div');
-    const tipoPrincipal = pokemon.types[0].type.name; // Pega o primeiro tipo
-    const tipoTraduzido = traducaoTipos[tipoPrincipal] || tipoPrincipal.toUpperCase();
+    const tipoPrincipal = pokemon.types[0].type.name;
+    const tipoTraduzido = getTipoTraduzido(tipoPrincipal);
+    const gen = pokemon.generationName || '';
 
-    // Formata o nome da geração (ex: "generation-i" vira "GERAÇÃO: I")
-    const displayGeneration = (pokemon.generationName || '').replace('generation-', 'Geração: ').toUpperCase();
-
-    // Adiciona as classes para o CSS colorir o fundo
     card.classList.add('pokemon-card', tipoPrincipal);
 
-    // Preenche a div com o HTML do card
     card.innerHTML = `
         <div class="img-container">
             <img src="${pokemon.sprites.other['official-artwork'].front_default}" alt="${pokemon.name}">
@@ -256,8 +259,8 @@ function createPokemonCard(pokemon) {
         <div class="info">
             <span class="number">#${pokemon.id.toString().padStart(3, '0')}</span>
             <h3 class="name">${pokemon.name}</h3>
-            <p class="type">Tipo: ${tipoTraduzido}</p>
-            <p class="generation"><strong>${displayGeneration}</strong></p>
+            <p class="type" data-tipo="${tipoPrincipal}">${getLabelTipo()}: ${tipoTraduzido}</p>
+            <p class="generation" data-gen="${gen}"><strong>${getLabelGen()} ${gen}</strong></p>
         </div>
     `;
 
@@ -283,9 +286,24 @@ if (pokemonInput) pokemonInput.addEventListener('keypress', (e) => {
     }
 });
 
+// Quando idioma muda, atualiza tipos e gerações nos cards visíveis
+document.addEventListener('langChanged', function (e) {
+    const lang = e.detail.lang;
+    document.querySelectorAll('.type[data-tipo]').forEach(function (el) {
+        const tipo = el.getAttribute('data-tipo');
+        const label = lang === 'en' ? 'Type' : 'Tipo';
+        el.textContent = label + ': ' + getTipoTraduzido(tipo);
+    });
+    document.querySelectorAll('.generation[data-gen]').forEach(function (el) {
+        const gen = el.getAttribute('data-gen');
+        const label = lang === 'en' ? 'GEN' : 'GER';
+        el.innerHTML = '<strong>' + label + ' ' + gen + '</strong>';
+    });
+});
+
 // Ao carregar a página, executa estas duas funções:
 if (pokedexList) {
-    fetchPokemons(); // Só traz os pokemons se a lista existir (Página Pokédex)
+    fetchPokemons();
 }
 carregarNomesParaSugestao().then(() => {
     setupAutocomplete();

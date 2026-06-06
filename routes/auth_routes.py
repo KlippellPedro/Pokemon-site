@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, jsonify, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from models.user_model import create_user, get_user_by_email
+from models.user_model import create_user, get_user_by_email, reset_password_db
 import os
 import uuid
 
@@ -69,9 +69,33 @@ def logout():
 @bp.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
     if request.method == 'POST':
-        email = request.form.get('email')
-        # Aqui depois você adiciona a lógica de recuperação de senha (ex: buscar usuário, enviar e-mail)
-        flash('Se o e-mail existir no nosso sistema, um link de recuperação foi enviado!', 'info')
+        email = request.form.get('email', '').strip().lower()
+        user = get_user_by_email(email)
+        if user:
+            # Marca a conta para resetar senha no próximo login
+            reset_password_db(user['id'], f'reset_{user["id"]}', forcar_reset=True)
+            flash('Conta encontrada! Defina sua nova senha abaixo.', 'success')
+            return redirect(url_for('auth.reset_password', email=email))
+        # Mensagem genérica por segurança (não revela se o email existe)
+        flash('Se esse e-mail estiver cadastrado, você receberá as instruções de redefinição.', 'info')
         return redirect(url_for('auth.login'))
-        
     return render_template('forgot_password.html')
+
+@bp.route('/reset_password/<email>', methods=['GET', 'POST'])
+def reset_password(email):
+    user = get_user_by_email(email)
+    if not user:
+        flash('Link inválido ou e-mail não encontrado.', 'danger')
+        return redirect(url_for('auth.forgot_password'))
+
+    if request.method == 'POST':
+        nova_senha = request.form.get('senha', '')
+        if len(nova_senha) < 4:
+            flash('A senha deve ter pelo menos 4 caracteres.', 'warning')
+            return render_template('reset_password.html', email=email)
+        # Salva nova senha e remove o flag de reset
+        reset_password_db(user['id'], nova_senha, forcar_reset=False)
+        flash('Senha redefinida com sucesso! Faça login com a nova senha.', 'success')
+        return redirect(url_for('auth.login'))
+
+    return render_template('reset_password.html', email=email)
